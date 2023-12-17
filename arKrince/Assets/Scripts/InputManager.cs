@@ -32,4 +32,8 @@ public class InputManager : MonoBehaviour
     {
         return _input.Player.Move.ReadValue<Vector2>();
     }
+    public bool Action()
+    {
+        return _input.Player.Action.triggered;
+    }
 }
