@@ -2,18 +2,25 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Press A to Start
+
+    private PlayerBehavior player;
     public bool GameIsStarted;
     public AudioSource GameStartSound;
     [SerializeField] private Animator StartPanelAnimator;
+
+    void Start()
+    {
+        player = GetComponentInChildren<PlayerBehavior>();
+    }
     void Update()
     {
         if(GameIsStarted == false)
         {
             if(InputManager.Instance.Action())
             {
+                player.canMove = true;
                 GameIsStarted = true;
-                GameStartSound.Play();
+               // GameStartSound.Play();
                 StartPanelAnimator.SetTrigger("Exit");
                 Invoke(nameof(PlayerSpawn), 1f);
             }

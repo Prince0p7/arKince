@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,16 +8,24 @@ public class GameState : MonoBehaviour
     public bool HasPlayerReachedTheDestination;
     public int nextLevelIndex;
     private float TimeOutsideShadow;
+    private PlayerBehavior player;
+
+    void Start()
+    {
+        player = GetComponentInChildren<PlayerBehavior>();
+    }
     void Update()
     {
         if(GameOver())
         {
+            player.canMove = false;
             PlayerDead();
             return;
         }
 
         if(HasPlayerReachedTheDestination == true)
         {
+            player.canMove = false;
             GameFinish();
         }
 

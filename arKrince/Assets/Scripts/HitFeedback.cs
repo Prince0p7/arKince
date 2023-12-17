@@ -12,7 +12,8 @@ public class HitFeedback : MonoBehaviour
     [SerializeField]
     private float shadowTimer;
 
-    private float maxShadowTimer = 1.5f;
+    public float maxShadowTimer = 1.5f;
+    public float maxIntensity;
 
     public bool callVignette;
 
@@ -27,6 +28,10 @@ public class HitFeedback : MonoBehaviour
                 shadowTimer = 0;
             }            
         }
+        else
+        {
+            shadowTimer = 0;
+        }
     }
 
     public void Vignette()
@@ -36,7 +41,7 @@ public class HitFeedback : MonoBehaviour
         {
             Debug.Log("Vignette Working");
             float rateShadowTime = Mathf.Clamp01(shadowTimer/ maxShadowTimer);    
-            vignette.intensity.value = Mathf.Lerp(0, 0.35f, rateShadowTime);
+            vignette.intensity.value = Mathf.Lerp(0, maxIntensity, rateShadowTime);
         }
 
     }

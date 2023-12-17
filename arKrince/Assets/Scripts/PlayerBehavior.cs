@@ -3,8 +3,9 @@ using UnityEngine;
 public class PlayerBehavior : MonoBehaviour
 {
     private InputManager inputManager;
-    [SerializeField] private Animator anim;
-    private SpriteRenderer spriteRenderer;
+    [SerializeField] private Animator directionAnim;
+    [SerializeField] private Animator playerAnim;
+    [SerializeField] private SpriteRenderer spriteRenderer;
     [HideInInspector] public float direction;
     private Vector2 moveInput;
     [Header("FX")]
@@ -13,73 +14,90 @@ public class PlayerBehavior : MonoBehaviour
     private string[] IdleMovement = { "Idle N", "Idle NW", "Idle W", "Idle SW", "Idle S", "Idle SE", "Idle E", "Idle NE" };
     private string[] RunMovement = { "Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E", "Run NE" };
 
+    private CursorManager cursorManager;
+    public bool canMove;
+
     void Start()
     {
         inputManager = InputManager.Instance;
+        cursorManager = GetComponent<CursorManager>();
         playerAudioSource = GetComponent<AudioSource>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
     private void Update()
     {
         moveInput = inputManager.MoveInput();
-        GetDirection();
+        
+        if(canMove == true) GetDirection();
     }
     private void GetDirection()
     {
         if (moveInput.magnitude >= 0.2f)
         {
-            direction = -Mathf.RoundToInt(Vector2.SignedAngle(transform.up, moveInput));
-
-            if (direction < 0)
+            if(cursorManager.canJump == true)
             {
-                direction += 360;
+                playerAnim.Play("Jump");
+                directionAnim.Play(RunMovement[(int)direction]);
+                spriteRenderer.transform.position = transform.position;
             }
-
-            switch (direction)
+            else
             {
-                case <= 23:
-                    spriteRenderer.flipX = false;
-                    direction = 0;
-                    break;
-                case <= 68:
-                    spriteRenderer.flipX = false;
-                    direction = 1;
-                    break;
-                case <= 113:
-                    spriteRenderer.flipX = true;
-                    direction = 2;
-                    break;
-                case <= 150:
-                    spriteRenderer.flipX = true;
-                    direction = 3;
-                    break;
-                case <= 203:
-                    spriteRenderer.flipX = true;
-                    direction = 4;
-                    break;
-                case <= 248:
-                    spriteRenderer.flipX = false;
-                    direction = 5;
-                    break;
-                case <= 293:
-                    spriteRenderer.flipX = false;
-                    direction = 6;
-                    break;
-                case <= 338:
-                    spriteRenderer.flipX = false;
-                    direction = 7;
-                    break;
-                default:
-                    spriteRenderer.flipX = false;
-                    direction = 0;
-                    break;
-            }
+                direction = -Mathf.RoundToInt(Vector2.SignedAngle(spriteRenderer.transform.up, moveInput));
+                
+                transform.rotation = Quaternion.LookRotation(transform.forward, moveInput);
 
-            anim.Play(RunMovement[(int)direction]);
+                if (direction < 0)
+                {
+                    direction += 360;
+                }
+
+                switch (direction)
+                {
+                    case <= 23:
+                        spriteRenderer.flipX = false;
+                        direction = 0;
+                        break;
+                    case <= 68:
+                        spriteRenderer.flipX = false;
+                        direction = 1;
+                        break;
+                    case <= 113:
+                        spriteRenderer.flipX = true;
+                        direction = 2;
+                        break;
+                    case <= 150:
+                        spriteRenderer.flipX = true;
+                        direction = 3;
+                        break;
+                    case <= 203:
+                        spriteRenderer.flipX = true;
+                        direction = 4;
+                        break;
+                    case <= 248:
+                        spriteRenderer.flipX = false;
+                        direction = 5;
+                        break;
+                    case <= 293:
+                        spriteRenderer.flipX = false;
+                        direction = 6;
+                        break;
+                    case <= 338:
+                        spriteRenderer.flipX = true;
+                        direction = 7;
+                        break;
+                    default:
+                        spriteRenderer.flipX = false;
+                        direction = 0;
+                        break;
+                }
+            
+                playerAnim.Play("Idle");
+                directionAnim.Play(IdleMovement[(int)direction]);
+            }
         }
         else
         {
-            anim.Play(IdleMovement[(int)direction]);
+            playerAnim.Play("Idle");
+            directionAnim.Play(IdleMovement[(int)direction]);
         }        
     }
     public void PlayerFX()
