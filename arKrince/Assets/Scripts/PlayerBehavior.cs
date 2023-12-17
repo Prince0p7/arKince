@@ -3,20 +3,21 @@ using UnityEngine;
 public class PlayerBehavior : MonoBehaviour
 {
     private InputManager inputManager;
-    private Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
-    private float direction;
-    [SerializeField] private float speed;
+    [HideInInspector] public float direction;
     private Vector2 moveInput;
+    [Header("FX")]
+    private AudioSource playerAudioSource;
+    [SerializeField] private Animator landingAnimator;
     private string[] IdleMovement = { "Idle N", "Idle NW", "Idle W", "Idle SW", "Idle S", "Idle SE", "Idle E", "Idle NE" };
     private string[] RunMovement = { "Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E", "Run NE" };
 
     void Start()
     {
         inputManager = InputManager.Instance;
-        rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
+        playerAudioSource = GetComponent<AudioSource>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
     private void Update()
@@ -24,20 +25,11 @@ public class PlayerBehavior : MonoBehaviour
         moveInput = inputManager.MoveInput();
         GetDirection();
     }
-    private void FixedUpdate()
-    {
-        Move();
-    }
-    private void Move()
-    {
-        rb.velocity = moveInput * speed * Time.deltaTime;
-    }
     private void GetDirection()
     {
-
         if (moveInput.magnitude >= 0.2f)
         {
-            direction = -Mathf.RoundToInt(Vector2.SignedAngle(transform.up, rb.velocity));
+            direction = -Mathf.RoundToInt(Vector2.SignedAngle(transform.up, moveInput));
 
             if (direction < 0)
             {
@@ -90,5 +82,12 @@ public class PlayerBehavior : MonoBehaviour
         {
           //  anim.Play(IdleMovement[(int)direction]);
         }        
+    }
+    public void PlayerFX()
+    {
+        playerAudioSource.Stop();
+        playerAudioSource.Play();
+        landingAnimator.gameObject.SetActive(false);
+        landingAnimator.gameObject.SetActive(true);
     }
 }
