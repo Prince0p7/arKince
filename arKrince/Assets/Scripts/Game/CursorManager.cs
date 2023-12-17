@@ -28,20 +28,14 @@ public class CursorManager : MonoBehaviour
             }
             else
             {
-                cursor.position = (Vector2)transform.position;
-                anim.SetTrigger("Exit");
-                Invoke(nameof(ResetCursor), 1);
+                cursor.position = (Vector2)transform.position;                
+                cursor.gameObject.SetActive(false);
             }
         }
         else
         {
             cursor.position = (Vector2)transform.position;
-            anim.SetTrigger("Exit");
-            Invoke(nameof(ResetCursor), 1);
+            cursor.gameObject.SetActive(false);
         }
-    }
-    private void ResetCursor()
-    {
-        cursor.gameObject.SetActive(false);
     }
 }
