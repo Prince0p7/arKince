@@ -16,6 +16,8 @@ public class PlayerBehavior : MonoBehaviour
 
     private CursorManager cursorManager;
     public bool canMove;
+    
+    public EndPoint endPoint;
 
     void Start()
     {
@@ -26,8 +28,8 @@ public class PlayerBehavior : MonoBehaviour
     private void Update()
     {
         moveInput = inputManager.MoveInput();
-        
-        if(canMove == true) GetDirection();
+
+        if(canMove == true && endPoint.gameFinished != true) GetDirection();
     }
     private void GetDirection()
     {
@@ -96,8 +98,11 @@ public class PlayerBehavior : MonoBehaviour
         }
         else
         {
-            playerAnim.Play("Idle");
-            directionAnim.Play(IdleMovement[(int)direction]);
+            if(cursorManager.canJump == false)
+            {
+                playerAnim.Play("Idle");
+                directionAnim.Play(IdleMovement[(int)direction]);
+            }
         }        
     }
     public void PlayerFX()

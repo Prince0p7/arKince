@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,12 +7,7 @@ public class GameState : MonoBehaviour
     public bool HasPlayerReachedTheDestination;
     public int nextLevelIndex;
     private float TimeOutsideShadow;
-    private PlayerBehavior player;
-
-    void Start()
-    {
-        player = GetComponentInChildren<PlayerBehavior>();
-    }
+    [SerializeField] private PlayerBehavior player;
     void Update()
     {
         if(GameOver())
@@ -35,7 +29,7 @@ public class GameState : MonoBehaviour
         // Win Animation
         // Win SFX
         // Fade In Transition
-        Invoke(nameof(NextLevel), 2);
+        Invoke(nameof(NextLevel), 1);
     }
     private void NextLevel()
     {

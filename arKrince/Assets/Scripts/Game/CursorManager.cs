@@ -16,7 +16,7 @@ public class CursorManager : MonoBehaviour
     }
     void Update()
     {
-        if(player.canMove == false) return;
+        if(player.canMove == false || player.endPoint.gameFinished == true) return;
 
         Vector2 nextPosition = new (Mathf.RoundToInt(InputManager.Instance.MoveInput().x), Mathf.RoundToInt(InputManager.Instance.MoveInput().y));
 
@@ -64,7 +64,6 @@ public class CursorManager : MonoBehaviour
     }
     public void ResetCursor()
     {
-        Debug.Log("Jumping");
         delay = 0;
         canJump = false;
     }
