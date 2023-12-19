@@ -20,7 +20,6 @@ public class EndPoint : MonoBehaviour
             {
                 gameFinished = true;
                 gameState.HasPlayerReachedTheDestination = true;
-                player.GetComponent<Animator>().Play("Exit");
             }
         }
     }

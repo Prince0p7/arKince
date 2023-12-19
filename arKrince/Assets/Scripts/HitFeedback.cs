@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class HitFeedback : MonoBehaviour
 {
@@ -14,23 +13,36 @@ public class HitFeedback : MonoBehaviour
 
     public float maxShadowTimer = 1.5f;
     public float maxIntensity;
-
     public bool callVignette;
 
     void Update()
     {
+        if(SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            callVignette = false;
+            shadowTimer = 0;
+            return;
+        }
+
+        Vignette();
+        
         if(callVignette)
         {
-            Vignette();
-            shadowTimer += Time.deltaTime;
-            if(shadowTimer >= maxShadowTimer)
+            if(shadowTimer <= maxShadowTimer)
             {
-                shadowTimer = 0;
-            }            
+                shadowTimer += Time.deltaTime;
+            }
         }
         else
         {
-            shadowTimer = 0;
+            if(shadowTimer <= 0)
+            {
+                shadowTimer = 0;
+            }
+            else
+            {
+                shadowTimer -= Time.deltaTime;
+            }
         }
     }
 
@@ -39,10 +51,8 @@ public class HitFeedback : MonoBehaviour
         Vignette vignette;
         if (globalVolume.profile.TryGet(out vignette))
         {
-            Debug.Log("Vignette Working");
             float rateShadowTime = Mathf.Clamp01(shadowTimer/ maxShadowTimer);    
             vignette.intensity.value = Mathf.Lerp(0, maxIntensity, rateShadowTime);
         }
-
     }
 }

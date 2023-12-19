@@ -1,9 +1,11 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
-    private PlayerInput _input; // Input Action Reference
+    private PlayerInput _input;
     public static InputManager Instance;
 
     void Awake()

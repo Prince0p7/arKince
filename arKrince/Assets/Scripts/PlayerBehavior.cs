@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerBehavior : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [HideInInspector] public float direction;
     private Vector2 moveInput;
+    private Vector2 directionVector;
     [Header("FX")]
     private AudioSource playerAudioSource;
     [SerializeField] private Animator landingAnimator;
@@ -29,7 +31,23 @@ public class PlayerBehavior : MonoBehaviour
     {
         moveInput = inputManager.MoveInput();
 
-        if(canMove == true && endPoint.gameFinished != true) GetDirection();
+        if(canMove == true && endPoint.gameFinished != true)
+        {
+            GetDirection();
+        }
+        else
+        {
+            playerAnim.Play("Idle");
+            
+            if(endPoint.gameFinished == false)
+            {
+                directionAnim.Play(IdleMovement[(int)direction]);            
+            }
+            else
+            {
+                directionAnim.Play("Exit");
+            }
+        }
     }
     private void GetDirection()
     {
@@ -44,8 +62,6 @@ public class PlayerBehavior : MonoBehaviour
             else
             {
                 direction = -Mathf.RoundToInt(Vector2.SignedAngle(spriteRenderer.transform.up, moveInput));
-                
-                transform.rotation = Quaternion.LookRotation(transform.forward, moveInput);
 
                 if (direction < 0)
                 {
@@ -57,40 +73,51 @@ public class PlayerBehavior : MonoBehaviour
                     case <= 23:
                         spriteRenderer.flipX = false;
                         direction = 0;
+                        directionVector = new(0, 1);
                         break;
                     case <= 68:
                         spriteRenderer.flipX = false;
                         direction = 1;
+                        directionVector = new(1, 1);
                         break;
                     case <= 113:
                         spriteRenderer.flipX = true;
                         direction = 2;
+                        directionVector = new(1, 0);
                         break;
                     case <= 150:
                         spriteRenderer.flipX = true;
                         direction = 3;
+                        directionVector = new(1, -1);
                         break;
                     case <= 203:
                         spriteRenderer.flipX = true;
                         direction = 4;
+                        directionVector = new(0, -1);
                         break;
                     case <= 248:
                         spriteRenderer.flipX = false;
                         direction = 5;
+                        directionVector = new(-1, -1);
                         break;
                     case <= 293:
                         spriteRenderer.flipX = false;
                         direction = 6;
+                        directionVector = new(-1, 0);
                         break;
                     case <= 338:
                         spriteRenderer.flipX = true;
                         direction = 7;
+                        directionVector = new(-1, 1);
                         break;
                     default:
                         spriteRenderer.flipX = false;
                         direction = 0;
+                        directionVector = new(0, 1);
                         break;
                 }
+                
+                transform.rotation = Quaternion.LookRotation(transform.forward, directionVector);
             
                 playerAnim.Play("Idle");
                 directionAnim.Play(IdleMovement[(int)direction]);

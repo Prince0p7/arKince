@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,12 +8,20 @@ public class GameState : MonoBehaviour
     public bool HasPlayerReachedTheDestination;
     public int nextLevelIndex;
     private float TimeOutsideShadow;
+    private float MaxTimeOutsideShadow = 2;
     [SerializeField] private PlayerBehavior player;
+    private HitFeedback hitFeedback;
+    void Start()
+    {
+        hitFeedback = FindObjectOfType<HitFeedback>();
+        MaxTimeOutsideShadow = hitFeedback.maxShadowTimer;
+    }
     void Update()
     {
         if(GameOver())
         {
             player.canMove = false;
+            InputManager.Instance.GetComponent<RumbleManager>().RumblePusle(1f, 1.2f, .005f);
             PlayerDead();
             return;
         }
@@ -22,7 +31,6 @@ public class GameState : MonoBehaviour
             player.canMove = false;
             GameFinish();
         }
-
     }
     private void GameFinish()
     {
@@ -44,7 +52,7 @@ public class GameState : MonoBehaviour
             return false;
         }
 
-        if(TimeOutsideShadow >= 1f)
+        if(TimeOutsideShadow >= MaxTimeOutsideShadow)
         {
             return true;
         }
@@ -55,11 +63,12 @@ public class GameState : MonoBehaviour
     }
     private void PlayerInsideShadow()
     {
+        hitFeedback.callVignette = false;
         // Normal FX
     }
     private void PlayerOutsideShadow()
     {
-        // Vignette
+        hitFeedback.callVignette = true;
         // Hit Animation
         // Hit SFX
     }

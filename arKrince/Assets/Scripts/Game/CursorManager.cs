@@ -26,7 +26,9 @@ public class CursorManager : MonoBehaviour
             
             Collider2D col = Physics2D.OverlapCircle(cursorPosition, 0.1f, whatAreObstacles);
 
-            if(col == null)
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, nextPosition - (Vector2) transform.position, distance, whatAreObstacles);
+
+            if(col == null || hit.collider == null)
             {
                 cursor.position = Vector2.Lerp(cursor.position, cursorPosition, 5 * Time.deltaTime);
 
