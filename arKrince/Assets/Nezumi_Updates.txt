@@ -1,0 +1,47 @@
+1) Cursor, Wall Glitch
+2) Splash FX
+-------3) Sewer Bubbles-------
+4) Sound FX
+
+More Levels
+
+FEEDBACKS
+1) ---Vignette Intensity--- and Red Shake Animation when Out of Shadow
+2) Particle Effect on Jumps
+5) Circle Transition
+
+
+CHARACTER ART 
+Dead Animation
+Hit Animation
+
+ART ENVIRONMENT LIST
+1) Road Tiles 4direction
+2) 
+
+
+MECHSSSS
+DYNAMIC LIGHTING
+
+ART
+Fire Hydrant
+Tree
+Street Light
+Filler Art
+Particle Effect
+
+ART PROP LIST (All Prop Have Idle Animation)
+3) Road Side Props Fire Hydrant
+4) Environment Props 
+ -- Column/Pillar, Tree, Street Light
+
+SOUND FX
+
+Movement --- Particle Effect, SFX
+
+
+DONE
+3) ///Pre Move Teller
+4) Zoomed in on Sewer at Start, Once Started Zoom Out.
+
+ 
